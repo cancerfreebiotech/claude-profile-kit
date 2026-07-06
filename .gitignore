@@ -1,0 +1,13 @@
+# 絕不入庫：登入憑證與任何 memory 資料 / 備份（本 repo 只放機制）
+.claude.json
+*.claude.json
+projects/
+memory/
+*.bak.*
+memory.bak.*
+
+# 雜項
+__pycache__/
+*.pyc
+sbx*/
+.DS_Store
