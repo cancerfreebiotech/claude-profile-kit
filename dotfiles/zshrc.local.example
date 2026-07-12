@@ -1,0 +1,25 @@
+# =====================================================================
+# ~/.zshrc.local — 機器特定 / 機密設定（絕不入 git）
+# 由 ~/.claude/dev-env.zsh 結尾載入；bootstrap 只在檔案不存在時建立本模板。
+# =====================================================================
+
+# --- API keys / tokens（機密，絕不放進任何 repo）---
+# export HF_TOKEN="hf_xxxxxxxxxxxxxxxxxxxx"
+# export LITELLM_MASTER_KEY="sk-litellm-master-xxxxxxxx"
+# export LITELLM_SALT_KEY="sk-litellm-salt-xxxxxxxx"
+# export LITELLM_DB_PASS="xxxxxxxx"
+
+# --- 機器特定路徑 ---
+# export HF_HOME=~/llm-models
+# export PATH="$HOME/tools/ngc-cli:$PATH"
+
+# --- 機器特定 alias ---
+# alias asr='cd ~/asr-poc && source venv/bin/activate'
+
+# --- 語言執行環境（bootstrap 不代裝 NVM/bun；自行裝好後解除註解）---
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# export BUN_INSTALL="$HOME/.bun"
+# export PATH="$BUN_INSTALL/bin:$PATH"
+# [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"

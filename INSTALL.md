@@ -10,12 +10,34 @@
 | `claude-profiles.zsh` | 全部 zsh function(切換/列出/刪除 profile + 共用 memory 的 `claude` wrapper) | `~/.claude/claude-profiles.zsh` |
 | `claude-share-memory.py` | 一次性遷移 / 手動合併多 profile 分岔 memory 的腳本 | `~/.claude/bin/claude-share-memory.py` |
 | `install.sh` | 冪等安裝器:放檔案、在 `~/.zshrc` 加一行 source、驗證語法 | — |
+| `bootstrap.sh` | **新機器一鍵開發環境**:套件、tailscale、oh-my-zsh、dotfiles、Claude Code,最後呼叫 `install.sh` | — |
+| `BOOTSTRAP.md` | 給新機器上 Claude Code 的 bootstrap 執行指示 | — |
+| `dotfiles/zshrc` | 新機器 `~/.zshrc` 模板(**只在原本沒有 .zshrc 時**部署) | `~/.zshrc` |
+| `dotfiles/dev-env.zsh` | 可攜 shell 自訂(screen 別名、PageUp/PageDown 前綴搜尋、視窗標題等) | `~/.claude/dev-env.zsh` |
+| `dotfiles/tmux.conf` | tmux 自訂設定(Ctrl+x prefix 等;`default-shell` 部署時依平台渲染) | `~/.tmux.conf` |
+| `dotfiles/zshrc.local.example` | 機密/機器特定設定範例(部署後**永不覆蓋**) | `~/.zshrc.local` |
 | `INSTALL.md` | 本說明 | — |
 
 ## 需求
 
 - **zsh**(functions 用到 zsh 專屬語法;非 zsh 會安全跳過不定義)
 - **python3**(只有手動合併腳本需要;日常切換/共用不需要)
+
+---
+
+## 新機器?用 bootstrap
+
+如果是一台全新機器(Ubuntu/Debian 或 macOS + Homebrew),不必手動裝上面的需求:
+照 README 先裝好 Claude Code,再讓它依 **[BOOTSTRAP.md](BOOTSTRAP.md)** 跑
+`bash bootstrap.sh`(冪等),一次裝好 zsh/oh-my-zsh/tmux/screen/tailscale/
+dotfiles + 本 kit。注意:
+
+- 機器**已有**自訂 `~/.zshrc` 時,bootstrap 不會覆蓋,只印手動整合指示。
+- `~/.zshrc.local`(機密/機器特定設定)部署一次後**永不覆蓋**;
+  內容不同的既有 `~/.tmux.conf` 也不會被覆蓋。
+- `bash bootstrap.sh --check` 只檢查現況、不改任何東西。
+
+以下章節是**只裝 kit 本體**(profile 管理 + 共用 memory)的流程。
 
 ---
 

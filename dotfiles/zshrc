@@ -1,0 +1,25 @@
+# =====================================================================
+# ~/.zshrc — 由 claude-profile-kit bootstrap 部署（來源：dotfiles/zshrc）
+# 機密與機器特定設定請放 ~/.zshrc.local（dev-env.zsh 結尾會載入）。
+# =====================================================================
+export ZSH="$HOME/.oh-my-zsh"
+
+ZSH_THEME="robbyrussell"
+
+plugins=(
+    git
+    sudo
+    zsh-autosuggestions
+    screen
+    command-not-found
+    history
+    zsh-syntax-highlighting
+)
+
+source $ZSH/oh-my-zsh.sh
+
+# Claude Code 多 Profile 身分管理 + 跨 profile 共用 memory
+[ -f "$HOME/.claude/claude-profiles.zsh" ] && source "$HOME/.claude/claude-profiles.zsh"
+
+# 可攜開發環境（screen 別名、PageUp/PageDown 歷史搜尋…；結尾會載入 ~/.zshrc.local）
+[ -f "$HOME/.claude/dev-env.zsh" ] && source "$HOME/.claude/dev-env.zsh"
