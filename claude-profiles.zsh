@@ -148,8 +148,50 @@ function _claude-share-memory() {
     ln -sfn "$canon" "$mine"
 }
 
-# 包一層 claude：啟動前先確保 memory 已共用
+# ---------------------------------------------------------------------
+# 🧩 跨 Profile 共用個人 skills
+# 共用正本永遠放在 ~/.claude/skills；其他 profile 一律 symlink 過去。
+# 邏輯與 memory 相同，但沒有 per-project slug（skills 是 profile 層級、不分 project）：
+#   • 已連結        → 略過
+#   • profile 沒 skills / 空 → 直接建 symlink 指向正本
+#   • 只有 profile 有   → 升格成共用正本，再 symlink
+#   • 兩邊都有內容(分岔) → 不動，提示手動比對合併（不像 memory 有專用合併腳本，skills 通常
+#     是刻意安裝、不常分岔，手動用 diff/mv 處理即可）
+# ---------------------------------------------------------------------
+function _claude-share-skills() {
+    [ -n "$CLAUDE_CONFIG_DIR" ] || return 0   # main 直接讀正本，免處理
+    emulate -L zsh
+    setopt local_options null_glob
+
+    local canon="$HOME/.claude/skills"
+    local mine="$CLAUDE_CONFIG_DIR/skills"
+
+    # 已經連到正本
+    [ "$(readlink "$mine" 2>/dev/null)" = "$canon" ] && return 0
+
+    # profile 端已有「實體、非空」skills
+    if [ -d "$mine" ] && [ ! -L "$mine" ] && [ -n "$(ls -A "$mine" 2>/dev/null)" ]; then
+        if [ -d "$canon" ] && [ -n "$(ls -A "$canon" 2>/dev/null)" ]; then
+            echo "⚠️  此 profile 與共用正本(~/.claude/skills)各有 skills，未自動合併。"
+            echo "    請手動比對後把獨有的搬進 ~/.claude/skills，再重新啟動 claude 建立連結。"
+            return 0
+        fi
+        mkdir -p "${canon:h}"
+        mv "$mine" "$canon"                # 只有 profile 有 → 升格為共用正本
+        ln -sfn "$canon" "$mine"
+        echo "🔗 已把此 profile 的 skills 升為共用正本並連結。"
+        return 0
+    fi
+
+    # profile 端沒有(或空) → 直接連到正本
+    mkdir -p "${canon:h}" "${mine:h}"
+    [ -d "$mine" ] && [ ! -L "$mine" ] && rmdir "$mine" 2>/dev/null
+    ln -sfn "$canon" "$mine"
+}
+
+# 包一層 claude：啟動前先確保 memory / skills 已共用
 function claude() {
     _claude-share-memory
+    _claude-share-skills
     command claude "$@"
 }

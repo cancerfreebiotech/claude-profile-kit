@@ -1,13 +1,13 @@
-# Claude Code 多 Profile + 跨 Profile 共用 memory — 安裝包
+# Claude Code 多 Profile + 跨 Profile 共用 memory / skills — 安裝包
 
 這個資料夾把「在同一台機器上切換多個 Claude Code 登入身分(profile),並讓不同 profile
-共用同一份專案 memory」的整套功能打包起來,方便從一台 Linux port 到另一台。
+共用同一份專案 memory 與個人 skills」的整套功能打包起來,方便從一台 Linux port 到另一台。
 
 ## 這裡有什麼
 
 | 檔案 | 用途 | 安裝後位置 |
 |---|---|---|
-| `claude-profiles.zsh` | 全部 zsh function(切換/列出/刪除 profile + 共用 memory 的 `claude` wrapper) | `~/.claude/claude-profiles.zsh` |
+| `claude-profiles.zsh` | 全部 zsh function(切換/列出/刪除 profile + 共用 memory/skills 的 `claude` wrapper) | `~/.claude/claude-profiles.zsh` |
 | `claude-share-memory.py` | 一次性遷移 / 手動合併多 profile 分岔 memory 的腳本 | `~/.claude/bin/claude-share-memory.py` |
 | `install.sh` | 冪等安裝器:放檔案、在 `~/.zshrc` 加一行 source、驗證語法 | — |
 | `bootstrap.sh` | **新機器一鍵開發環境**:套件、tailscale、oh-my-zsh、dotfiles、Claude Code,最後呼叫 `install.sh` | — |
@@ -83,19 +83,21 @@ source ~/.zshrc          # 或開新終端機
 ```bash
 claude-list                 # 列出所有 profile(👉 = 目前視窗使用中),含登入信箱
 claude-switch work          # 切到名為 work 的 profile(不存在會自動建目錄)
-claude                      # 照常啟動;wrapper 會自動把此 project 的 memory 接上共用正本
+claude                      # 照常啟動;wrapper 會自動把此 project 的 memory 與個人 skills 接上共用正本
 claude-switch main          # 切回主帳號(預設 ~/.claude)
 claude-remove work          # 刪除 work profile(需輸入 y 確認,不能刪 main)
 ```
 
-## 跨 profile 共用 memory 是怎麼運作的
+## 跨 profile 共用 memory / skills 是怎麼運作的
 
 - 每個 project 的 memory 只存**一份共用正本**在 `~/.claude/projects/<slug>/memory`;
   其他 profile 的對應目錄都是指向它的 **symlink**。所以切到任何 profile、進同一個
   project,讀寫的都是同一份 memory 與 `MEMORY.md`。
-- 每次用 `claude` 啟動時,wrapper `_claude-share-memory` 只做**無損**動作:
-  已連結就略過;profile 沒 memory 就建 symlink;只有 profile 有就升格為共用正本;
-  **兩邊都有內容(分岔)時停下報警、不亂併**,交給下面的腳本人工處理。
+- 個人 **skills** 邏輯相同,共用正本在 `~/.claude/skills`(profile 層級共用,不分 project)。
+- 每次用 `claude` 啟動時,wrapper `_claude-share-memory` / `_claude-share-skills` 只做
+  **無損**動作:已連結就略過;profile 沒有就建 symlink;只有 profile 有就升格為共用正本;
+  **兩邊都有內容(分岔)時停下報警、不亂併**——memory 交給下面的腳本人工處理,
+  skills 因為通常是刻意安裝、少分岔,手動比對搬檔即可。
 
 ### 一次性遷移 / 合併已分岔的 memory
 

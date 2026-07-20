@@ -1,7 +1,7 @@
 # claude-profile-kit
 
 **新機器一鍵建立開發環境**,並在同一台機器上切換多個 **Claude Code 登入身分(profile)**、
-讓不同 profile **共用同一份專案 memory**。可攜、冪等安裝,方便在多台機器之間 port。
+讓不同 profile **共用同一份專案 memory 與個人 skills**。可攜、冪等安裝,方便在多台機器之間 port。
 
 ## 新機器:先裝 Claude Code,其他交給它
 
@@ -61,21 +61,26 @@ claude-list             # 列出所有 profile(👉 = 目前視窗使用中),含
 claude-switch work      # 切到名為 work 的 profile(不存在會自動建目錄)
 claude-switch main      # 切回主帳號(預設 ~/.claude)
 claude-remove work      # 刪除 profile(需確認,不能刪 main)
-claude ...              # 照常啟動;會自動把此 project 的 memory 接上共用正本
+claude ...              # 照常啟動;會自動把此 project 的 memory 與個人 skills 接上共用正本
 ```
 
-## 跨 profile 共用 memory
+## 跨 profile 共用 memory 與 skills
 
 每個 project 的 memory 只存**一份共用正本**在 `~/.claude/projects/<slug>/memory`,
 其他 profile 的對應目錄都是指向它的 **symlink**。切到任何 profile、進同一個 project,
 讀寫的都是同一份 memory 與 `MEMORY.md`。
 
+個人 **skills** 也是同樣邏輯,共用正本在 `~/.claude/skills`(不分 project,profile 層級共用)。
+
 `claude` wrapper 在啟動前只做**無損**動作(建 symlink / 升格為正本);遇到多 profile
-各自寫過、內容分岔的情況會停下報警,交給合併腳本人工處理:
+各自寫過、內容分岔的情況會停下報警,不自動亂併:
 
 ```bash
+# memory 有專用合併腳本(按檔案合併、main 為主 + 補獨有檔)
 python3 ~/.claude/bin/claude-share-memory.py          # dry-run
-python3 ~/.claude/bin/claude-share-memory.py --apply  # 實際合併(main 為主 + 補獨有檔)
+python3 ~/.claude/bin/claude-share-memory.py --apply  # 實際合併
+
+# skills 分岔的情況少見(通常是刻意安裝),手動比對後搬進 ~/.claude/skills 即可
 ```
 
 ## 安全
