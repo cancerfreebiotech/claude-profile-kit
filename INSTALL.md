@@ -16,6 +16,9 @@
 | `dotfiles/dev-env.zsh` | 可攜 shell 自訂(screen 別名、PageUp/PageDown 前綴搜尋、視窗標題等) | `~/.claude/dev-env.zsh` |
 | `dotfiles/tmux.conf` | tmux 自訂設定(Ctrl+x prefix 等;`default-shell` 部署時依平台渲染) | `~/.tmux.conf` |
 | `dotfiles/zshrc.local.example` | 機密/機器特定設定範例(部署後**永不覆蓋**) | `~/.zshrc.local` |
+| `skills/notify-release/SKILL.md` | `/notify-release` 技能:`git push` 後寄發版通知 email(淨化過的機制檔,無金鑰) | `~/.claude/skills/notify-release/SKILL.md` |
+| `skills/notify-release/notify-release.env.example` | SendGrid 憑證範本(3 個 key:API key / from email / from name) | `~/.claude/notify-release.env`(0600,**只在缺時建、永不覆蓋**) |
+| `skills/notify-release/notify-release.config.example.json` | per-project 設定範本 | 複製到各專案 `.claude/notify-release.config.json` |
 | `INSTALL.md` | 本說明 | — |
 
 ## 需求
@@ -111,6 +114,33 @@ python3 ~/.claude/bin/claude-share-memory.py --apply  # 實際執行
 策略是 **main 為主 + 補獨有檔**:同名檔一律以 main(共用正本)版為準、不逐行合併;
 只把「正本缺、其他 profile 才有」的檔補進來;正本不存在時以檔案最多的 profile 當底。
 被取代的 profile 舊 memory 會改名成 `memory.bak.<時間戳>` 保留(不刪),可回溯。
+
+## notify-release 技能(發版通知 email)
+
+`install.sh` 會把技能裝到 `~/.claude/skills/notify-release/`。技能本身**不含任何金鑰**——
+真正的 SendGrid API key 只放在 `~/.claude/notify-release.env`(0600),**絕不入庫**。
+安裝器只會在該檔不存在時用範本建立一份 0600 空殼,已存在則不動。
+
+首次設定(每台機器一次):
+
+```bash
+# 方式 A：用技能互動式寫入（推薦）
+/notify-release setup-env          # 貼上 SendGrid API key、驗證寄件人、display name
+
+# 方式 B：手動編輯安裝器建立的空殼
+$EDITOR ~/.claude/notify-release.env
+```
+
+每個要用的專案跑一次:
+
+```bash
+/notify-release init               # 在專案根 scaffold .claude/notify-release.config.json + memory
+```
+
+之後 `git push` 到 main 且該版是 user-facing(feat/fix)時會自動寄送;
+也可手動 `/notify-release`、`/notify-release <version>`、`/notify-release --dry-run`。
+每個專案的 `.claude/notify-release.config.json`(含真實 Supabase ref)也**不入庫**——
+`.gitignore` 已排除 `notify-release.env`、`*.env`、`notify-release.config.json`。
 
 ## (選配)把舊機器的 memory 資料也帶過去
 

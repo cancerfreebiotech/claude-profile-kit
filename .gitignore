@@ -6,6 +6,12 @@ memory/
 *.bak.*
 memory.bak.*
 
+# notify-release：真實憑證與 per-project 設定絕不入庫（範本 *.example 仍可入庫）
+notify-release.env
+*.env
+!*.env.example
+notify-release.config.json
+
 # 雜項
 __pycache__/
 *.pyc

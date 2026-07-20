@@ -14,7 +14,7 @@
 #   6. 部署 dotfiles：~/.zshrc（僅原本沒有 .zshrc 的新機器）、
 #      ~/.claude/dev-env.zsh、~/.tmux.conf、~/.zshrc.local 模板（存在絕不覆蓋）
 #   7. Claude Code（native installer；已裝則略過）
-#   8. 呼叫 install.sh 安裝 kit 本體（多 profile + 共用 memory）
+#   8. 呼叫 install.sh 安裝 kit 本體（多 profile + 共用 memory + notify-release 技能）
 #
 # 支援平台：Ubuntu/Debian（apt）與 macOS（Homebrew）。
 # 機密（API key、token）請放 ~/.zshrc.local，絕不要放進這個 repo。

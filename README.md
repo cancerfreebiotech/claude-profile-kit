@@ -26,6 +26,7 @@ Claude 會照 **[BOOTSTRAP.md](BOOTSTRAP.md)** 跑 `bootstrap.sh`(冪等,重跑�
 - **tmux**(Ctrl+x prefix、vi copy-mode、滑鼠、自訂 status bar)與 **screen**(含 `sl`/`sr`/`sn` 別名)
 - **tailscale**(只安裝,結尾提示 `tailscale up`,不會自動連線)
 - **本 kit**(多 profile 管理 + 跨 profile 共用 memory)
+- **notify-release 技能**(`git push` 後寄發版通知 email;SendGrid 憑證放 `~/.claude/notify-release.env`,不入庫。詳見 [INSTALL.md](INSTALL.md))
 - PageUp/PageDown 前綴歷史搜尋等 shell 自訂功能;機密與機器特定設定走 `~/.zshrc.local`
 
 不透過 Claude 手動跑也可以:
@@ -90,3 +91,5 @@ python3 ~/.claude/bin/claude-share-memory.py --apply  # 實際合併
   新機器上每個 profile 各自重新登入即可。
 - 機密(API key、token)與機器特定設定一律放 `~/.zshrc.local`
   (bootstrap 會建立範本、之後永不覆蓋;shell 啟動鏈最後載入,可覆蓋一切預設)。
+- notify-release 的 SendGrid key 放 `~/.claude/notify-release.env`、各專案設定放
+  `.claude/notify-release.config.json`,兩者都被 `.gitignore` 排除,**絕不入庫**。

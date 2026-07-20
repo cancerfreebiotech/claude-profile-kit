@@ -10,8 +10,10 @@
 #   2. 建目錄 ~/.claude/{bin,projects}、~/.claude_profiles
 #   3. 安裝 claude-profiles.zsh → ~/.claude/claude-profiles.zsh
 #   4. 安裝 claude-share-memory.py → ~/.claude/bin/
-#   5. 在 ~/.zshrc 加一行 source（只加一次）
-#   6. 語法驗證
+#   5. 安裝 notify-release 技能 → ~/.claude/skills/notify-release/
+#      （SendGrid 機密 env 只在缺時用範本建立 0600、永不覆蓋）
+#   6. 在 ~/.zshrc 加一行 source（只加一次）
+#   7. 語法驗證
 # 不會碰任何登入憑證，也不會搬 memory 資料（那是選配，見 INSTALL.md）。
 set -euo pipefail
 
@@ -40,6 +42,8 @@ if [ "$CHECK_ONLY" = "1" ]; then
     say "── 現況檢查 ──"
     [ -f "$CLAUDE_DIR/claude-profiles.zsh" ] && say "  已安裝 claude-profiles.zsh" || say "  尚未安裝 claude-profiles.zsh"
     [ -f "$CLAUDE_DIR/bin/claude-share-memory.py" ] && say "  已安裝 claude-share-memory.py" || say "  尚未安裝 claude-share-memory.py"
+    [ -f "$CLAUDE_DIR/skills/notify-release/SKILL.md" ] && say "  已安裝 notify-release 技能" || say "  尚未安裝 notify-release 技能"
+    [ -f "$CLAUDE_DIR/notify-release.env" ] && say "  ~/.claude/notify-release.env 已存在（SendGrid 憑證）" || say "  ~/.claude/notify-release.env 尚未建立（跑安裝或 /notify-release setup-env）"
     grep -qF 'claude-profiles.zsh' "$RC" 2>/dev/null && say "  $RC 已有 source 行" || say "  $RC 尚未加 source 行"
     exit 0
 fi
@@ -52,6 +56,23 @@ install -m 0644 "$KIT/claude-profiles.zsh"      "$CLAUDE_DIR/claude-profiles.zsh
 install -m 0755 "$KIT/claude-share-memory.py"   "$CLAUDE_DIR/bin/claude-share-memory.py"
 say "✅ 已安裝 $CLAUDE_DIR/claude-profiles.zsh"
 say "✅ 已安裝 $CLAUDE_DIR/bin/claude-share-memory.py"
+
+# 4b. notify-release 技能（機制檔，無條件更新）--------------------------
+if [ -d "$KIT/skills/notify-release" ]; then
+    mkdir -p "$CLAUDE_DIR/skills/notify-release"
+    install -m 0644 "$KIT/skills/notify-release/SKILL.md"                            "$CLAUDE_DIR/skills/notify-release/SKILL.md"
+    install -m 0644 "$KIT/skills/notify-release/notify-release.env.example"          "$CLAUDE_DIR/skills/notify-release/notify-release.env.example"
+    install -m 0644 "$KIT/skills/notify-release/notify-release.config.example.json"  "$CLAUDE_DIR/skills/notify-release/notify-release.config.example.json"
+    say "✅ 已安裝 notify-release 技能 → $CLAUDE_DIR/skills/notify-release/"
+
+    # SendGrid 機密 env：只在不存在時用範本建立（0600）、永不覆蓋
+    if [ ! -f "$CLAUDE_DIR/notify-release.env" ]; then
+        install -m 0600 "$KIT/skills/notify-release/notify-release.env.example" "$CLAUDE_DIR/notify-release.env"
+        say "🆕 已建立 $CLAUDE_DIR/notify-release.env 範本（0600）— 請填入真實 SendGrid key（或跑 /notify-release setup-env）"
+    else
+        say "ℹ️  $CLAUDE_DIR/notify-release.env 已存在，未動。"
+    fi
+fi
 
 # 5. 在 ~/.zshrc 加 source（冪等）---------------------------------------
 touch "$RC"

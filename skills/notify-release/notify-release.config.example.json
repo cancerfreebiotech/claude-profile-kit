@@ -1,0 +1,19 @@
+{
+  "$comment": "複製到各專案 repo 根的 .claude/notify-release.config.json 並填入實際值（或用 /notify-release init 產生）。所有值皆為佔位字串。",
+  "supabaseProjectRef": "your-supabase-ref",
+  "recipientRpc": "get_notification_recipients",
+  "recipientFilter": "mfa_only",
+  "replyToEmail": "you@example.com",
+  "fromName": "Your Name (MyApp)",
+  "changelogPath": "docs/CHANGELOG.md",
+  "versionSource": "package.json",
+  "projectName": "MyApp",
+  "projectUrl": "https://myapp.example.com",
+  "subjectTemplate": "{projectName} 已更新到 v{version}",
+  "greeting": "大家好,",
+  "introTemplate": "{projectName} 發布了 v{version}。",
+  "signature": "— Your Name",
+  "timezone": "Asia/Taipei",
+  "language": "zh-TW",
+  "releaseTimeLabel": "發布時間"
+}
