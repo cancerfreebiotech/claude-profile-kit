@@ -2,6 +2,7 @@
 
 **新機器一鍵建立開發環境**,並在同一台機器上切換多個 **Claude Code 登入身分(profile)**、
 讓不同 profile **共用同一份專案 memory 與個人 skills**。可攜、冪等安裝,方便在多台機器之間 port。
+另含一份**多 agent 分工的專案模板**,可複製到任何新 project(見下方「專案模板」章節)。
 
 ## 新機器:先裝 Claude Code,其他交給它
 
@@ -83,6 +84,40 @@ python3 ~/.claude/bin/claude-share-memory.py --apply  # 實際合併
 
 # skills 分岔的情況少見(通常是刻意安裝),手動比對後搬進 ~/.claude/skills 即可
 ```
+
+## 專案模板:多 agent 分工(`templates/claude-project-template`)
+
+一份可以複製到任何新 project 的 `.claude/` 模板 + `CLAUDE.md`:一個 orchestrator(主 session)
+負責判斷與整合,依任務性質委派給不同的專業 subagent,每個角色可以配置不同模型
+(走支援 Anthropic Messages 格式的 LLM gateway,例如 LiteLLM,不同模型名字路由到不同 provider)。
+
+| 角色 | 類型 | 用途 |
+|---|---|---|
+| advisor | native(`advisorModel`) | 策略/高層意見,`/advisor` 觸發 |
+| security-review | subagent | 密鑰/auth/對外端點/WAF 設定的安全審查,唯讀 |
+| ui-designer | subagent | 視覺/UI 一致性,含 mobile-friendly 檢查 |
+| tech-writer | subagent | 文件/changelog/release notes,含 zh-TW/en/ja 多語系同步 |
+| executor | subagent | 沒有特定專業對應的一般實作,預設工作者 |
+| verifier | subagent | 完成後獨立驗證,不修不寫,只回報 CONFIRMED/REFUTED/INCONCLUSIVE |
+| summarizer | subagent | 整合多個 agent 的產出成一份人看的結論 |
+
+用法:
+
+```bash
+cp -r templates/claude-project-template/.claude /path/to/new-project/.claude
+cp templates/claude-project-template/CLAUDE.md /path/to/new-project/CLAUDE.md
+cd /path/to/new-project
+cp .claude/settings.local.json.example .claude/settings.local.json
+# 編輯 .claude/settings.json:把 <your-gateway-base-url> 換成你的 gateway 網址
+# 編輯 .claude/settings.local.json:貼上真的 auth token(不入庫)
+# 編輯 CLAUDE.md:填入專案簡介、技術棧、命名規範、安全性規則、禁止事項
+```
+
+**前提**:需要一個 Anthropic-Messages-格式相容的 LLM gateway,且模型別名要用 `claude-*`/`anthropic-*`
+開頭(Claude Code 的 model discovery 只認這兩種開頭)。**已知限制**:`ANTHROPIC_BASE_URL` 整個
+session 共用,所有 agent 沒辦法各自打不同的 endpoint;若環境變數設了 `CLAUDE_CODE_SUBAGENT_MODEL`
+會蓋掉所有 subagent 的 `model:` frontmatter,讓分工模型形同虛設。細節見
+[templates/claude-project-template/README.md](templates/claude-project-template/README.md)。
 
 ## 安全
 
