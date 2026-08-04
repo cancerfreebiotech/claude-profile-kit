@@ -1,0 +1,7 @@
+{
+  "model": "claude-proxy-opus",
+  "advisorModel": "claude-proxy-opus",
+  "env": {
+    "ANTHROPIC_BASE_URL": "<your-gateway-base-url>"
+  }
+}
