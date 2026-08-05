@@ -94,6 +94,7 @@ python3 ~/.claude/bin/claude-share-memory.py --apply  # 實際合併
 | 角色 | 類型 | 用途 |
 |---|---|---|
 | advisor | native(`advisorModel`) | 策略/高層意見,`/advisor` 觸發 |
+| explorer | subagent | Discovery:找相關檔案/既有慣例/可重用實作,唯讀 |
 | security-review | subagent | 密鑰/auth/對外端點/WAF 設定的安全審查,唯讀 |
 | ui-designer | subagent | 視覺/UI 一致性,含 mobile-friendly 檢查 |
 | tech-writer | subagent | 文件/changelog/release notes,含 zh-TW/en/ja 多語系同步 |

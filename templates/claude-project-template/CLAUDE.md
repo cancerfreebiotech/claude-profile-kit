@@ -44,6 +44,7 @@ Reuse existing code/patterns first — read neighbouring files before writing. C
 
 | 情況 | 委派給 |
 |---|---|
+| 需要先摸清楚現有程式碼/慣例、找可重用的既有實作 | `explorer` |
 | 一般實作、bug fix、沒有特別專業要求 | `executor` |
 | 觸碰密鑰、auth、對外端點、WAF/tunnel 設定 | `security-review`（先審查，通過才交 `executor` 動手） |
 | UI/視覺/排版/RWD 判斷 | `ui-designer` |
@@ -53,7 +54,7 @@ Reuse existing code/patterns first — read neighbouring files before writing. C
 | 策略/高層決策拿不定主意 | `/advisor` |
 | 任務複雜到要先產出結構化計畫 | Plan Mode 或內建 `Plan` agent type（不用另建 subagent） |
 
-**流程**：Discovery（自己看，或用內建 `Explore`）→ Plan（不確定才做）→ 執行（委派對應角色）→ Verification（`verifier` 覆核）→ 整合（動用多角色才需要 `summarizer`）。
+**流程**：Discovery（交給 `explorer`，簡單狀況可自己看）→ Plan（不確定才做）→ 執行（委派對應角色）→ Verification（`verifier` 覆核）→ 整合（動用多角色才需要 `summarizer`）。
 
 **規則**：
 - 已派出去做唯讀分析的 agent，範圍暫時算它獨占——結果回來前不要自己重複分析同一塊，除非要取消重派。

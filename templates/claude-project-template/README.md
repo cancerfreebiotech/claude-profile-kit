@@ -1,12 +1,13 @@
 # claude-project-template
 
-一份可以複製到任何新 project 的 `.claude/` 模板 + `CLAUDE.md`：一個 orchestrator（主 session）+ 6 個專業分工 subagent + native advisor 設定，模型分配走多 provider 的 LLM gateway（見下方「你需要準備的東西」）。`CLAUDE.md` 沿用 [其他專案] 既有的規範結構（開發原則、Git/版本慣例、風險操作守則），技術棧相關章節留白給各專案自己填。
+一份可以複製到任何新 project 的 `.claude/` 模板 + `CLAUDE.md`：一個 orchestrator（主 session）+ 7 個專業分工 subagent + native advisor 設定，模型分配走多 provider 的 LLM gateway（見下方「你需要準備的東西」）。`CLAUDE.md` 沿用 [其他專案] 既有的規範結構（開發原則、Git/版本慣例、風險操作守則），技術棧相關章節留白給各專案自己填。
 
 ## 角色一覽
 
 | 角色 | 類型 | 用途 |
 |---|---|---|
 | advisor | native (`advisorModel`) | 策略/高層意見，`/advisor` 觸發 |
+| explorer | subagent | Discovery：找相關檔案/既有慣例/可重用實作，唯讀 |
 | security-review | subagent | 密鑰/auth/對外端點/WAF 設定的安全審查，唯讀 |
 | ui-designer | subagent | 視覺/UI 一致性，掛 design 相關 skill |
 | tech-writer | subagent | 文件/changelog/release notes，掛 document 相關 skill |

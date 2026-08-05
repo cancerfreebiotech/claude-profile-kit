@@ -2,6 +2,7 @@
 name: ui-designer
 description: Visual/UI work — component styling, layout, design consistency review, mobile-friendliness. Leans on the design-review/design-consultation/dataviz skills rather than working from scratch.
 model: claude-proxy-sonnet
+effort: xhigh
 tools: Read, Grep, Glob, Edit, Write, Bash
 skills: design-review, design-consultation, dataviz
 color: pink
