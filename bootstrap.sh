@@ -6,7 +6,7 @@
 #        bash bootstrap.sh --check   # 只檢查現況，不改任何東西
 #
 # 做的事（全部冪等，重跑安全）：
-#   1. 套件：zsh tmux screen git curl（Linux: apt / macOS: brew）
+#   1. 套件：zsh tmux screen mosh git curl（Linux: apt / macOS: brew）
 #   2. tailscale（只安裝，不自動連線；結尾提示 tailscale up）
 #   3. 預設 shell 改為 zsh
 #   4. oh-my-zsh（無人值守；絕不覆蓋既有 ~/.zshrc）
@@ -83,7 +83,7 @@ claude_installed() {
 if [ "$CHECK_ONLY" = "1" ]; then
     say ""
     say "── 現況檢查（bootstrap）──"
-    for c in zsh tmux screen git curl; do
+    for c in zsh tmux screen mosh git curl; do
         command -v "$c" >/dev/null 2>&1 && say "  ✅ $c：$(command -v "$c")" || say "  ❌ 缺 $c"
     done
     tailscale_installed && say "  ✅ tailscale 已安裝" || say "  ❌ tailscale 未安裝"
@@ -127,9 +127,9 @@ say "── 1/8 基本套件 ──"
 if [ "$PLATFORM" = "linux-apt" ]; then
     $SUDO apt-get update
     $SUDO env DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        zsh tmux screen git curl ca-certificates command-not-found python3
+        zsh tmux screen mosh git curl ca-certificates command-not-found python3
 else
-    for pkg in zsh tmux screen git; do
+    for pkg in zsh tmux screen mosh git; do
         if brew list --formula "$pkg" >/dev/null 2>&1; then
             say "ℹ️  $pkg 已安裝（brew），略過。"
         else
