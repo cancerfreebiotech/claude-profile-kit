@@ -1,7 +1,7 @@
 ---
 name: tech-writer
 description: Documentation, READMEs, changelogs, release notes — anything primarily written for a human reader. Handles zh-TW/English/Japanese i18n. Leans on document-generate/document-release skills.
-model: claude-proxy-GLM5-2
+model: claude-proxy-qwen3.6
 tools: Read, Grep, Glob, Edit, Write
 skills: document-generate, document-release
 color: green

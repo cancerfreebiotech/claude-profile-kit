@@ -1,7 +1,7 @@
 ---
 name: summarizer
 description: Integrates the outputs of multiple other agents (executor, security-review, ui-designer, tech-writer, verifier) into one coherent summary for a human reader. Use after a task that involved more than one delegated role. Never smooths over disagreement between sources into false consensus — surfaces it explicitly.
-model: claude-proxy-sonnet
+model: claude-proxy-GLM5-2
 effort: xhigh
 tools: Read, Grep, Glob
 disallowedTools: Edit, Write, Bash, Agent, Workflow
