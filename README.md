@@ -25,6 +25,7 @@ Claude 會照 **[BOOTSTRAP.md](BOOTSTRAP.md)** 跑 `bootstrap.sh`(冪等,重跑�
 
 - **zsh + oh-my-zsh**(含 zsh-autosuggestions / zsh-syntax-highlighting 外掛)並設為預設 shell
 - **tmux**(Ctrl+x prefix、vi copy-mode、滑鼠、自訂 status bar)與 **screen**(含 `sl`/`sr`/`sn` 別名)
+- **mosh**(漫遊型 SSH，斷線重連、行動網路友善；連線目標若在防火牆/security list 後面，記得另外開放 UDP port，預設 60000-61000)
 - **tailscale**(只安裝,結尾提示 `tailscale up`,不會自動連線)
 - **本 kit**(多 profile 管理 + 跨 profile 共用 memory)
 - **notify-release 技能**(`git push` 後寄發版通知 email;SendGrid 憑證放 `~/.claude/notify-release.env`,不入庫。詳見 [INSTALL.md](INSTALL.md))

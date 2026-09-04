@@ -26,7 +26,7 @@
    ```bash
    bash bootstrap.sh
    ```
-   它會依序處理：基本套件（zsh/tmux/screen/git/curl/python3）→ tailscale →
+   它會依序處理：基本套件（zsh/tmux/screen/mosh/git/curl/python3）→ tailscale →
    預設 shell 改 zsh → oh-my-zsh + 兩個外掛 → 部署 dotfiles（`~/.zshrc`、
    `~/.claude/dev-env.zsh`、`~/.tmux.conf`、`~/.zshrc.local` 模板）→
    Claude Code（已裝會略過）→ kit 本體（`install.sh`）。

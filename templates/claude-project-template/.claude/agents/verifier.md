@@ -1,7 +1,7 @@
 ---
 name: verifier
 description: Fresh-context, independent verification after any other role's work is "done" — executor, ui-designer, tech-writer, security-review. Use to check whether a change actually works and didn't break anything nearby. Never plans, fixes, or implements. Returns CONFIRMED, REFUTED, or INCONCLUSIVE with evidence.
-model: claude-proxy-grok-4-5
+model: claude-proxy-grok
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit, Agent, Workflow
 color: purple
