@@ -19,6 +19,7 @@
 | `skills/notify-release/SKILL.md` | `/notify-release` 技能:`git push` 後寄發版通知 email(淨化過的機制檔,無金鑰) | `~/.claude/skills/notify-release/SKILL.md` |
 | `skills/notify-release/notify-release.env.example` | SendGrid 憑證範本(3 個 key:API key / from email / from name) | `~/.claude/notify-release.env`(0600,**只在缺時建、永不覆蓋**) |
 | `skills/notify-release/notify-release.config.example.json` | per-project 設定範本 | 複製到各專案 `.claude/notify-release.config.json` |
+| `skills/litellm-usage/SKILL.md` | （選配,`install.sh` 不會自動裝)查 ai-stack LiteLLM 用量/token/錯誤,見下方說明 | 手動複製到 `~/.claude/skills/litellm-usage/` |
 | `INSTALL.md` | 本說明 | — |
 
 ## 需求
@@ -141,6 +142,16 @@ $EDITOR ~/.claude/notify-release.env
 也可手動 `/notify-release`、`/notify-release <version>`、`/notify-release --dry-run`。
 每個專案的 `.claude/notify-release.config.json`(含真實 Supabase ref)也**不入庫**——
 `.gitignore` 已排除 `notify-release.env`、`*.env`、`notify-release.config.json`。
+
+## (選配)litellm-usage 技能
+
+查 ai-stack LiteLLM 用量/token/錯誤的技能,綁定特定主機的 infra(cancerfree-arm-free/oci2
+上的 ai-stack 部署),不是每個人都用得到,`install.sh` **不會**自動安裝。要用的話自己複製:
+
+```bash
+mkdir -p ~/.claude/skills/litellm-usage
+cp claude-profile-kit/skills/litellm-usage/SKILL.md ~/.claude/skills/litellm-usage/
+```
 
 ## (選配)把舊機器的 memory 資料也帶過去
 
