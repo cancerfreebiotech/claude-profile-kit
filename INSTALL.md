@@ -153,6 +153,19 @@ mkdir -p ~/.claude/skills/litellm-usage
 cp claude-profile-kit/skills/litellm-usage/SKILL.md ~/.claude/skills/litellm-usage/
 ```
 
+## (選配)ponytail 外部 plugin
+
+[Ponytail](https://github.com/dietrichgebert/ponytail) 是第三方(不是本 kit 維護)的 Claude Code
+plugin,教 agent 走「先確認真的需要寫 code 再寫、優先用現成方案」的極簡風格。這個 kit **不代管**它的
+原始碼、`install.sh` 也不會裝,純粹記一下要用的話怎麼裝(在 Claude Code 對話裡分兩次輸入):
+
+```
+/plugin marketplace add DietrichGebert/ponytail
+/plugin install ponytail@ponytail
+```
+
+（兩行要分兩次送出,合在一次會裝不起來。）沒有需要改的設定檔,是否要裝看個人喜好。
+
 ## (選配)把舊機器的 memory 資料也帶過去
 
 安裝器只裝**機制**,不含任何 memory 內容。若要把舊機器累積的 memory 一起搬過來,
