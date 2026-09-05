@@ -19,6 +19,9 @@
 | `skills/notify-release/SKILL.md` | `/notify-release` 技能:`git push` 後寄發版通知 email(淨化過的機制檔,無金鑰) | `~/.claude/skills/notify-release/SKILL.md` |
 | `skills/notify-release/notify-release.env.example` | SendGrid 憑證範本(3 個 key:API key / from email / from name) | `~/.claude/notify-release.env`(0600,**只在缺時建、永不覆蓋**) |
 | `skills/notify-release/notify-release.config.example.json` | per-project 設定範本 | 複製到各專案 `.claude/notify-release.config.json` |
+| `skills/turnover-submit/SKILL.md` | `/turnover-submit` 技能:從 Claude Code 直接提交/查詢 FlightPath 的資料庫 turnover(淨化過的機制檔,無金鑰) | `~/.claude/skills/turnover-submit/SKILL.md` |
+| `skills/turnover-submit/flightpath-turnover.env.example` | FlightPath Turnover 個人 API key 範本(1 個 key) | `~/.claude/flightpath-turnover.env`(0600,**只在缺時建、永不覆蓋**) |
+| `skills/turnover-submit/flightpath.config.example.json` | per-project 設定範本(不含機密,只有 project id) | 複製到各專案 `.claude/flightpath.json` |
 | `skills/litellm-usage/SKILL.md` | （選配,`install.sh` 不會自動裝)查 ai-stack LiteLLM 用量/token/錯誤,見下方說明 | 手動複製到 `~/.claude/skills/litellm-usage/` |
 | `INSTALL.md` | 本說明 | — |
 
@@ -142,6 +145,34 @@ $EDITOR ~/.claude/notify-release.env
 也可手動 `/notify-release`、`/notify-release <version>`、`/notify-release --dry-run`。
 每個專案的 `.claude/notify-release.config.json`(含真實 Supabase ref)也**不入庫**——
 `.gitignore` 已排除 `notify-release.env`、`*.env`、`notify-release.config.json`。
+
+## turnover-submit 技能(FlightPath 資料庫 turnover,不用開瀏覽器)
+
+`install.sh` 會把技能裝到 `~/.claude/skills/turnover-submit/`。技能本身**不含任何金鑰**——
+真正的 FlightPath 個人 API key 只放在 `~/.claude/flightpath-turnover.env`(0600),**絕不入庫**。
+安裝器只會在該檔不存在時用範本建立一份 0600 空殼,已存在則不動。
+
+首次設定(每台機器一次):
+
+```bash
+# 到 FlightPath /turnover 頁面「API Key」區塊自助產生一支 key(完整明碼只顯示一次)
+/turnover-submit setup-env          # 貼上 key
+```
+
+每個要用的專案跑一次:
+
+```bash
+/turnover-submit init               # 在專案根 scaffold .claude/flightpath.json（不含機密，可入庫）
+```
+
+之後直接提交、輪詢到有結果為止:
+
+```bash
+/turnover-submit db/migrations/add_col.sql
+/turnover-submit "ALTER TABLE foo ADD COLUMN bar text;"
+/turnover-submit --dry-run ...       # 只預覽，不真的送出
+/turnover-submit --status <runId>    # 查之前送出的那筆
+```
 
 ## (選配)litellm-usage 技能
 

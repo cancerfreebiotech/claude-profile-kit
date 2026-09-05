@@ -1,0 +1,5 @@
+{
+  "$comment": "複製到專案 repo 根的 .claude/flightpath.json 並填入實際值（或用 /turnover-submit init 產生）。這個檔案不含任何機密，可以進版控。",
+  "projectId": "00000000-0000-0000-0000-000000000000",
+  "flightpathUrl": "https://flightpath.cancerfree.io"
+}
