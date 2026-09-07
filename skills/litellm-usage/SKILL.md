@@ -1,6 +1,6 @@
 ---
 name: litellm-usage
-description: Report a user's LiteLLM (ai-stack, cancerfree-arm-free/oci2) usage — calls, tokens, spend by model, and error breakdown for failures. Use when asked to "查一下 XX 的用量/token/model/錯誤" for a LiteLLM user, or to compare usage across the known users (justin, po, davie, walt).
+description: Report a user's LiteLLM (ai-stack, cancerfree-arm-free/oci2) usage — calls, tokens, spend by model, and error breakdown for failures. Use when asked to "查一下 XX 的用量/token/model/錯誤" for a LiteLLM user, or to compare usage across the known users (justin, po, davie, walt, heather).
 ---
 
 # LiteLLM usage report
@@ -9,7 +9,7 @@ Runs against the `ai-stack` LiteLLM deployment on this host (cancerfree-arm-free
 
 ## Arguments
 
-Parse from the invocation: one or more people (by first name or full email) and optionally a time window (default `24 hours`, e.g. "過去 3 天" → `3 days`). "all" or no name given means all four known users.
+Parse from the invocation: one or more people (by first name or full email) and optionally a time window (default `24 hours`, e.g. "過去 3 天" → `3 days`). "all" or no name given means all five known users.
 
 ## Known users
 
@@ -21,6 +21,7 @@ Each person has many virtual keys (`key_alias` gets a new one per login/session)
 | po | `user-pohan.chen%` |
 | davie | `user-davie.dai%` |
 | walt | `user-walt.tsai%` |
+| heather | `user-heather.tang%` |
 
 For a name not in this table, ask the user for the email, or try `user-<given-name>%` against `metadata->>'user_api_key_alias'` and confirm it matched something before reporting.
 
@@ -34,6 +35,7 @@ SELECT
     WHEN \"metadata\"->>'user_api_key_alias' ILIKE 'user-pohan.chen%' THEN 'po'
     WHEN \"metadata\"->>'user_api_key_alias' ILIKE 'user-davie.dai%' THEN 'davie'
     WHEN \"metadata\"->>'user_api_key_alias' ILIKE 'user-walt.tsai%' THEN 'walt'
+    WHEN \"metadata\"->>'user_api_key_alias' ILIKE 'user-heather.tang%' THEN 'heather'
   END AS person,
   count(*) AS calls,
   sum(CASE WHEN status='success' THEN 1 ELSE 0 END) AS ok,
@@ -45,7 +47,8 @@ WHERE \"startTime\" >= now() - interval '24 hours'
   AND (\"metadata\"->>'user_api_key_alias' ILIKE 'user-justin.lee%'
     OR \"metadata\"->>'user_api_key_alias' ILIKE 'user-pohan.chen%'
     OR \"metadata\"->>'user_api_key_alias' ILIKE 'user-davie.dai%'
-    OR \"metadata\"->>'user_api_key_alias' ILIKE 'user-walt.tsai%')
+    OR \"metadata\"->>'user_api_key_alias' ILIKE 'user-walt.tsai%'
+    OR \"metadata\"->>'user_api_key_alias' ILIKE 'user-heather.tang%')
 GROUP BY person
 ORDER BY calls DESC;
 "
